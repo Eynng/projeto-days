@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
   <title>Eu te Amo </title>
   <style>
     body {
       font-family: Arial, sans-serif;
       font-style: italic;
       color: rgb(255, 0, 0);
-      background-color: #303030;
+      background-color: #272727;
       text-align: center;
       margin: 0;
       padding: 20px;
@@ -23,7 +24,12 @@
     h1 {
       font-size: 36px;
       margin-bottom: 20px;
-      text-shadow: 2px 1px 4px  rgb(255, 201, 201);
+      text-shadow: 2px 1px 2px  rgba(255, 255, 255, 0.493);
+    }
+
+    p {
+      text-shadow: 1px 1px 1px  rgba(255, 255, 255, 0.527);
+      
     }
     #slider-container {
       position: relative;
@@ -53,37 +59,97 @@
       font-size: 20px;
       font-weight: bold;
     }
+
+    /* Corações animados */
+  .heart {
+    position: fixed;
+    top: -50px;
+    color: pink;
+    font-size: 20px;
+    animation: fall linear;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.8;
+  }
+
+  @keyframes fall {
+    to {
+      transform: translateY(100vh) rotate(360deg);
+      opacity: 0;
+    }
+  }
   </style>
 </head>
 <body>
 
   <h1>Ewelyn & Ramon</h1>
 
-  <!-- Áudio MP3 -->
-  <audio controls>
-    <source src="https://www.youtube.com/watch?v=e81d7rTAIaw" type="audio/mpeg" />
-    Seu navegador não suporta o elemento de áudio.
-  </audio>
+  <!-- Player de Áudio com Controles -->
+  <div id="audio-player">
+    <div class="nav-buttons">
+      <button onclick="prevAudio()"> < </button>
+      <button onclick="nextAudio()"> > </button>
+    </div>
+    <audio id="audio" controls>
+      <source id="audio-source" src="" type="audio/mpeg" />
+      Seu navegador não suporta o elemento de áudio.
+    </audio>
+  </div>
 
   <!-- Slider de Imagens -->
   <div id="slider-container">
-    <img id="slide" src="" alt="Slide" />
     <div class="nav-buttons">
       <button onclick="prevSlide()">Anterior</button>
       <button onclick="nextSlide()">Próximo</button>
     </div>
+    <img id="slide" src="" alt="Slide" />
   </div>
 
   <!-- Relógio em tempo real desde 01/05/2025 17:30 -->
   <p id="contador">Carregando contador...</p>
 
   <script>
+    // Lista de músicas .mp3
+    const audios = [
+      'media/audio1.mp3',
+      'media/audio4.mp3',
+      'media/audio2.mp3',
+      'media/audio3.mp3',
+      'media/audio5.mp3',
+      'media/audio6.mp3'
+    ];
+
+    let currentAudioIndex = 0;
+    const audioElement = document.getElementById('audio');
+    const audioSource = document.getElementById('audio-source');
+
+    function loadAudio(index) {
+      audioSource.src = audios[index];
+      audioElement.load();
+      audioElement.play();
+    }
+
+    function nextAudio() {
+      currentAudioIndex = (currentAudioIndex + 1) % audios.length;
+      loadAudio(currentAudioIndex);
+    }
+
+    function prevAudio() {
+      currentAudioIndex = (currentAudioIndex - 1 + audios.length) % audios.length;
+      loadAudio(currentAudioIndex);
+    }
+
+    // Carregar a primeira música ao iniciar
+    loadAudio(currentAudioIndex);
+
+    // Restante do seu script (slides + contador) continua aqui...
+
     // Slides
     const slides = [
-      'images/foto1.jpg',
-      'images/foto2.jpg',
       'images/foto3.jpg',
-      'images/foto4.jpg'
+      'images/foto4.jpg',
+      'images/foto2.jpg',
+      'images/foto1.jpg'
     ];
     let currentSlide = 0;
 
@@ -118,11 +184,37 @@
       const remainingSeconds = seconds % 60;
 
       document.getElementById('contador').innerText =
-        `Juntos desde 01/05/2025  ás ${String(hours).padStart(2, '0')} Horas ${String(minutes).padStart(2, '0')} Minutos ${String(remainingSeconds).padStart(2, '0')} Segundos`;
+        `Juntos desde 01/05/2025  às ${String(hours).padStart(2, '0')} Horas ${String(minutes).padStart(2, '0')} Minutos ${String(remainingSeconds).padStart(2, '0')} Segundos...`;
     }
 
     setInterval(updateCounter, 1000);
-    updateCounter(); // Atualiza imediatamente
+    updateCounter();
+
+    function createHeart() {
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    heart.innerText = '❤️';
+
+    // Posição horizontal aleatória
+    heart.style.left = Math.random() * 100 + 'vw';
+
+    // Tamanho aleatório
+    heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+
+    // Duração de animação aleatória
+    const duration = Math.random() * 3 + 2;
+    heart.style.animationDuration = duration + 's';
+
+    document.body.appendChild(heart);
+
+    // Remover coração após animação
+    setTimeout(() => {
+      heart.remove();
+    }, duration * 1000);
+  }
+
+  // Criar corações a cada 300ms
+  setInterval(createHeart, 300);
   </script>
 </body>
 </html>
