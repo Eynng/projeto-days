@@ -12,6 +12,7 @@
       overflow-x: hidden;
       color: #d6336c;
       text-align: center;
+      padding: 0 10px; /* Pequeno padding geral nas laterais */
     }
 
     h1 {
@@ -33,6 +34,7 @@
       font-weight: bold;
       color: #b81d4f;
       text-shadow: 1px 1px 2px #ffb3c1;
+      padding: 10px; /* Padding para afastar da borda */
     }
 
     /* Sistema de áudio */
@@ -43,7 +45,7 @@
     /* Slideshow */
     .slideshow {
       position: relative;
-      max-width: 500px;
+      max-width: 90%;
       margin: 20px auto;
     }
 
@@ -61,6 +63,9 @@
 
     .btn-container {
       margin-top: 10px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
     }
 
     .btn-container button {
@@ -95,6 +100,31 @@
         opacity: 0;
       }
     }
+
+    /* ===== RESPONSIVIDADE ===== */
+    @media (max-width: 1024px) { /* Tablet */
+      h1 { font-size: 2.5rem; }
+      .contador { font-size: 1.2rem; }
+    }
+
+    @media (max-width: 768px) { /* Celular */
+      h1 { font-size: 2rem; }
+      .contador { font-size: 1rem; }
+      .btn-container button {
+        font-size: 14px;
+        padding: 8px 16px;
+      }
+    }
+
+    @media (min-width: 1600px) { /* TV e telas grandes */
+      h1 { font-size: 4rem; }
+      .contador { font-size: 1.6rem; }
+      .slideshow { max-width: 60%; }
+      .btn-container button {
+        font-size: 20px;
+        padding: 14px 28px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -110,19 +140,29 @@
     </audio>
   </div>
 
+
   <!-- Slideshow -->
-  <div class="slideshow">
-    <img id="foto" src="foto1.jpg" alt="Foto do casal" class="show">
-    <div class="btn-container">
-      <button onclick="anteriorFoto()">⬅ Anterior</button>
-      <button onclick="proximaFoto()">Próximo ➡</button>
-    </div>
+<div class="slideshow">
+  <img id="foto" src="foto1.jpg" alt="Foto do casal" class="show">
+  <div class="btn-container">
+    <button onclick="anteriorFoto()">⬅ Anterior</button>
+    <button onclick="proximaFoto()">Próximo ➡</button>
   </div>
+
+  <!-- Texto romântico -->
+  <div class="mensagem-romantica">
+    Oi meu amor, mil perdões por demorar tanto para lhe entregar este presente, 
+    é um presente significativo, simbólico... maas, você é tão minimalista, simples, 
+    carinhosa e muito compreensiva, que só por essas virtudes mostra que você é idêntica 
+    e verdadeira (muuuuito linda também... <3)
+  </div>
+</div>
+
 
   <script>
     // ===== CONTADOR DESDE 01/05/2025 =====
     function atualizarContador() {
-      const inicio = new Date(2025, 4, 1); // Mês começa em 0 = Janeiro, então 4 é Maio
+      const inicio = new Date(2025, 4, 1); 
       const agora = new Date();
       let diff = agora - inicio;
 
@@ -130,7 +170,7 @@
       let minutos = Math.floor(segundos / 60);
       let horas = Math.floor(minutos / 60);
       let dias = Math.floor(horas / 24);
-      let meses = Math.floor(dias / 30); // Aproximação de meses
+      let meses = Math.floor(dias / 30);
 
       segundos %= 60;
       minutos %= 60;
