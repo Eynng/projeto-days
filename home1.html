@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
+  <title>Eu te Amo </title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      font-style: italic;
+      color: rgb(255, 0, 0);
+      background-color: #272727;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+
+      
+    }
+    audio {
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 20px;
+      text-shadow: 2px 1px 2px  rgba(255, 255, 255, 0.493);
+    }
+
+    p {
+      text-shadow: 1px 1px 1px  rgba(255, 255, 255, 0.527);
+      
+    }
+    #slider-container {
+      position: relative;
+      max-width: 600px;
+      margin: 20px auto;
+    }
+    #slide {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    .nav-buttons {
+      margin-top: 10px;
+    }
+    .nav-buttons button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 20px;
+      margin: 0 5px;
+      cursor: pointer;
+      border: none;
+      
+    }
+    #contador {
+      margin-top: 30px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    /* Corações animados */
+  .heart {
+    position: fixed;
+    top: -50px;
+    color: pink;
+    font-size: 20px;
+    animation: fall linear;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.8;
+  }
+
+  @keyframes fall {
+    to {
+      transform: translateY(100vh) rotate(360deg);
+      opacity: 0;
+    }
+  }
+  </style>
+</head>
+<body>
+
+  <h1>Ewelyn & Ramon</h1>
+
+  <!-- Player de Áudio com Controles -->
+  <div id="audio-player">
+    <audio id="audio" controls>
+      <source id="audio-source" src="" type="audio/mpeg" />
+      Seu navegador não suporta o elemento de áudio.
+    </audio>
+    <div class="nav-buttons">
+      <button onclick="prevAudio()"> < </button>
+      <button onclick="nextAudio()"> > </button>
+    </div>
+  </div>
+
+  <!-- Slider de Imagens -->
+  <div id="slider-container">
+    <div class="nav-buttons">
+      <button onclick="prevSlide()">Anterior</button>
+      <button onclick="nextSlide()">Próximo</button>
+    </div>
+    <img id="slide" src="" alt="Slide" />
+  </div>
+
+  <!-- Relógio em tempo real desde 01/05/2025 17:30 -->
+  <p id="contador">Carregando contador...</p>
+
+  <script>
+    // Lista de músicas .mp3
+    const audios = [
+      'media/audio1.mp3',
+      'media/audio4.mp3',
+      'media/audio2.mp3',
+      'media/audio3.mp3',
+      'media/audio5.mp3',
+      'media/audio6.mp3',
+      'media/audio7.mp3',
+      'media/audio8.mp3',
+      'media/audio9mp3',
+      'media/audio10.mp3',
+      'media/audio11.mp3',
+      'media/audio12.mp3'
+    ];
+
+    let currentAudioIndex = 0;
+    const audioElement = document.getElementById('audio');
+    const audioSource = document.getElementById('audio-source');
+
+    function loadAudio(index) {
+      audioSource.src = audios[index];
+      audioElement.load();
+      audioElement.play();
+    }
+
+    function nextAudio() {
+      currentAudioIndex = (currentAudioIndex + 1) % audios.length;
+      loadAudio(currentAudioIndex);
+    }
+
+    function prevAudio() {
+      currentAudioIndex = (currentAudioIndex - 1 + audios.length) % audios.length;
+      loadAudio(currentAudioIndex);
+    }
+
+    // Carregar a primeira música ao iniciar
+    loadAudio(currentAudioIndex);
+
+    // Restante do seu script (slides + contador) continua aqui...
+
+    // Slides
+    const slides = [
+      'images/foto3.jpg',
+      'images/foto4.jpg',
+      'images/foto2.jpg',
+      'images/foto1.jpg'
+    ];
+    let currentSlide = 0;
+
+    function showSlide(index) {
+      const slideImg = document.getElementById('slide');
+      slideImg.src = slides[index];
+    }
+
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % slides.length;
+      showSlide(currentSlide);
+    }
+
+    function prevSlide() {
+      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+      showSlide(currentSlide);
+    }
+
+    // Inicializar primeiro slide
+    showSlide(currentSlide);
+
+    // Contador de tempo desde 01/05/2025 às 17:30
+    const startTime = new Date('2025-05-01T17:30:00');
+
+    function updateCounter() {
+      const now = new Date();
+      const diff = now - startTime;
+
+      const seconds = Math.floor(diff / 1000);
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      const remainingSeconds = seconds % 60;
+
+      document.getElementById('contador').innerText =
+        `Juntos desde 01/05/2025  às ${String(hours).padStart(2, '0')} Horas ${String(minutes).padStart(2, '0')} Minutos ${String(remainingSeconds).padStart(2, '0')} Segundos...`;
+    }
+
+    setInterval(updateCounter, 1000);
+    updateCounter();
+
+    function createHeart() {
+    const heart = document.createElement('div');
+    heart.classList.add('heart');
+    heart.innerText = '❤️';
+
+    // Posição horizontal aleatória
+    heart.style.left = Math.random() * 100 + 'vw';
+
+    // Tamanho aleatório
+    heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+
+    // Duração de animação aleatória
+    const duration = Math.random() * 3 + 2;
+    heart.style.animationDuration = duration + 's';
+
+    document.body.appendChild(heart);
+
+    // Remover coração após animação
+    setTimeout(() => {
+      heart.remove();
+    }, duration * 1000);
+  }
+
+  // Criar corações a cada 300ms
+  setInterval(createHeart, 300);
+  </script>
+</body>
+</html>

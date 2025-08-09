@@ -1,226 +1,209 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="shortcut icon" href="images/favicon.png" type="image/x-icon">
-  <title>Eu te Amo </title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ewelyn e Ramon</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      font-style: italic;
-      color: rgb(255, 0, 0);
-      background-color: #272727;
-      text-align: center;
       margin: 0;
-      padding: 20px;
-
-      
-    }
-    audio {
-      margin-bottom: 20px;
+      font-family: 'Segoe Script', cursive;
+      background-color: #ffdde1;
+      overflow-x: hidden;
+      color: #d6336c;
+      text-align: center;
     }
 
     h1 {
-      font-size: 36px;
-      margin-bottom: 20px;
-      text-shadow: 2px 1px 2px  rgba(255, 255, 255, 0.493);
+      font-size: 3rem;
+      margin-top: 20px;
+      text-shadow: 0px 0px 10px #ffb3c1, 0px 0px 20px #ff4d6d;
+      animation: pulse 2s infinite alternate;
     }
 
-    p {
-      text-shadow: 1px 1px 1px  rgba(255, 255, 255, 0.527);
-      
+    @keyframes pulse {
+      0% { transform: scale(1); text-shadow: 0px 0px 10px #ffb3c1, 0px 0px 20px #ff4d6d; }
+      100% { transform: scale(1.05); text-shadow: 0px 0px 15px #ff99aa, 0px 0px 30px #ff1e50; }
     }
-    #slider-container {
+
+    /* Contador */
+    .contador {
+      font-size: 1.3rem;
+      margin-top: 5px;
+      font-weight: bold;
+      color: #b81d4f;
+      text-shadow: 1px 1px 2px #ffb3c1;
+    }
+
+    /* Sistema de áudio */
+    .audio-player {
+      margin: 20px 0;
+    }
+
+    /* Slideshow */
+    .slideshow {
       position: relative;
-      max-width: 600px;
+      max-width: 500px;
       margin: 20px auto;
     }
-    #slide {
+
+    .slideshow img {
       width: 100%;
-      height: auto;
-      border-radius: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      border-radius: 15px;
+      box-shadow: 0px 4px 15px rgba(0,0,0,0.3);
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
     }
-    .nav-buttons {
+
+    .slideshow img.show {
+      opacity: 1;
+    }
+
+    .btn-container {
       margin-top: 10px;
     }
-    .nav-buttons button {
-      padding: 10px 20px;
-      font-size: 16px;
-      border-radius: 20px;
-      margin: 0 5px;
-      cursor: pointer;
+
+    .btn-container button {
+      background-color: #ff4d6d;
       border: none;
-      
-    }
-    #contador {
-      margin-top: 30px;
-      font-size: 20px;
-      font-weight: bold;
+      padding: 10px 20px;
+      color: white;
+      font-size: 16px;
+      margin: 5px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
     }
 
-    /* Corações animados */
-  .heart {
-    position: fixed;
-    top: -50px;
-    color: pink;
-    font-size: 20px;
-    animation: fall linear;
-    z-index: 0;
-    pointer-events: none;
-    opacity: 0.8;
-  }
-
-  @keyframes fall {
-    to {
-      transform: translateY(100vh) rotate(360deg);
-      opacity: 0;
+    .btn-container button:hover {
+      background-color: #d6336c;
+      transform: scale(1.05);
     }
-  }
+
+    /* Corações caindo */
+    .heart {
+      position: fixed;
+      top: -10px;
+      color: #ff4d6d;
+      animation: fall linear forwards;
+      z-index: 999;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(100vh);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <h1>Ewelyn & Ramon</h1>
+  <h1>💖 Ewelyn e Ramon 💖</h1>
+  <div class="contador" id="contador"></div>
 
-  <!-- Player de Áudio com Controles -->
-  <div id="audio-player">
-    <audio id="audio" controls>
-      <source id="audio-source" src="" type="audio/mpeg" />
-      Seu navegador não suporta o elemento de áudio.
+  <!-- Player de música -->
+  <div class="audio-player">
+    <audio id="music" autoplay loop>
+      <source src="musica.mp3" type="audio/mpeg">
+      Seu navegador não suporta áudio HTML5.
     </audio>
-    <div class="nav-buttons">
-      <button onclick="prevAudio()"> < </button>
-      <button onclick="nextAudio()"> > </button>
-    </div>
   </div>
 
-  <!-- Slider de Imagens -->
-  <div id="slider-container">
-    <div class="nav-buttons">
-      <button onclick="prevSlide()">Anterior</button>
-      <button onclick="nextSlide()">Próximo</button>
+  <!-- Slideshow -->
+  <div class="slideshow">
+    <img id="foto" src="foto1.jpg" alt="Foto do casal" class="show">
+    <div class="btn-container">
+      <button onclick="anteriorFoto()">⬅ Anterior</button>
+      <button onclick="proximaFoto()">Próximo ➡</button>
     </div>
-    <img id="slide" src="" alt="Slide" />
   </div>
-
-  <!-- Relógio em tempo real desde 01/05/2025 17:30 -->
-  <p id="contador">Carregando contador...</p>
 
   <script>
-    // Lista de músicas .mp3
-    const audios = [
-      'media/audio1.mp3',
-      'media/audio4.mp3',
-      'media/audio2.mp3',
-      'media/audio3.mp3',
-      'media/audio5.mp3',
-      'media/audio6.mp3',
-      'media/audio7.mp3',
-      'media/audio8.mp3',
-      'media/audio9mp3',
-      'media/audio10.mp3',
-      'media/audio11.mp3',
-      'media/audio12.mp3'
-    ];
+    // ===== CONTADOR DESDE 01/05/2025 =====
+    function atualizarContador() {
+      const inicio = new Date(2025, 4, 1); // Mês começa em 0 = Janeiro, então 4 é Maio
+      const agora = new Date();
+      let diff = agora - inicio;
 
-    let currentAudioIndex = 0;
-    const audioElement = document.getElementById('audio');
-    const audioSource = document.getElementById('audio-source');
+      let segundos = Math.floor(diff / 1000);
+      let minutos = Math.floor(segundos / 60);
+      let horas = Math.floor(minutos / 60);
+      let dias = Math.floor(horas / 24);
+      let meses = Math.floor(dias / 30); // Aproximação de meses
 
-    function loadAudio(index) {
-      audioSource.src = audios[index];
-      audioElement.load();
-      audioElement.play();
+      segundos %= 60;
+      minutos %= 60;
+      horas %= 24;
+      dias %= 30;
+
+      document.getElementById("contador").textContent =
+        `${meses} meses, ${dias} dias, ${horas} horas, ${minutos} minutos e ${segundos} segundos`;
+    }
+    setInterval(atualizarContador, 1000);
+    atualizarContador();
+
+    // ===== SLIDESHOW =====
+    const fotos = ["foto1.jpg", "foto2.jpg", "foto3.jpg"];
+    let fotoAtual = 0;
+    const img = document.getElementById("foto");
+    let intervalo;
+
+    function mostrarFoto() {
+      img.classList.remove("show");
+      setTimeout(() => {
+        img.src = fotos[fotoAtual];
+        img.classList.add("show");
+      }, 500);
     }
 
-    function nextAudio() {
-      currentAudioIndex = (currentAudioIndex + 1) % audios.length;
-      loadAudio(currentAudioIndex);
+    function proximaFoto() {
+      fotoAtual = (fotoAtual + 1) % fotos.length;
+      mostrarFoto();
+      reiniciarSlideshow();
     }
 
-    function prevAudio() {
-      currentAudioIndex = (currentAudioIndex - 1 + audios.length) % audios.length;
-      loadAudio(currentAudioIndex);
+    function anteriorFoto() {
+      fotoAtual = (fotoAtual - 1 + fotos.length) % fotos.length;
+      mostrarFoto();
+      reiniciarSlideshow();
     }
 
-    // Carregar a primeira música ao iniciar
-    loadAudio(currentAudioIndex);
-
-    // Restante do seu script (slides + contador) continua aqui...
-
-    // Slides
-    const slides = [
-      'images/foto3.jpg',
-      'images/foto4.jpg',
-      'images/foto2.jpg',
-      'images/foto1.jpg'
-    ];
-    let currentSlide = 0;
-
-    function showSlide(index) {
-      const slideImg = document.getElementById('slide');
-      slideImg.src = slides[index];
+    function iniciarSlideshow() {
+      intervalo = setInterval(() => {
+        fotoAtual = (fotoAtual + 1) % fotos.length;
+        mostrarFoto();
+      }, 5000);
     }
 
-    function nextSlide() {
-      currentSlide = (currentSlide + 1) % slides.length;
-      showSlide(currentSlide);
+    function reiniciarSlideshow() {
+      clearInterval(intervalo);
+      iniciarSlideshow();
     }
 
-    function prevSlide() {
-      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-      showSlide(currentSlide);
+    iniciarSlideshow();
+
+    // ===== CORAÇÕES CAINDO =====
+    function criarCoracao() {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.style.left = Math.random() * 100 + "vw";
+      heart.style.fontSize = (Math.random() * 20 + 15) + "px";
+      heart.style.animationDuration = (Math.random() * 3 + 2) + "s";
+      heart.innerText = "💖";
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 5000);
     }
+    setInterval(criarCoracao, 300);
 
-    // Inicializar primeiro slide
-    showSlide(currentSlide);
-
-    // Contador de tempo desde 01/05/2025 às 17:30
-    const startTime = new Date('2025-05-01T17:30:00');
-
-    function updateCounter() {
-      const now = new Date();
-      const diff = now - startTime;
-
-      const seconds = Math.floor(diff / 1000);
-      const hours = Math.floor(seconds / 3600);
-      const minutes = Math.floor((seconds % 3600) / 60);
-      const remainingSeconds = seconds % 60;
-
-      document.getElementById('contador').innerText =
-        `Juntos desde 01/05/2025  às ${String(hours).padStart(2, '0')} Horas ${String(minutes).padStart(2, '0')} Minutos ${String(remainingSeconds).padStart(2, '0')} Segundos...`;
-    }
-
-    setInterval(updateCounter, 1000);
-    updateCounter();
-
-    function createHeart() {
-    const heart = document.createElement('div');
-    heart.classList.add('heart');
-    heart.innerText = '❤️';
-
-    // Posição horizontal aleatória
-    heart.style.left = Math.random() * 100 + 'vw';
-
-    // Tamanho aleatório
-    heart.style.fontSize = Math.random() * 20 + 10 + 'px';
-
-    // Duração de animação aleatória
-    const duration = Math.random() * 3 + 2;
-    heart.style.animationDuration = duration + 's';
-
-    document.body.appendChild(heart);
-
-    // Remover coração após animação
-    setTimeout(() => {
-      heart.remove();
-    }, duration * 1000);
-  }
-
-  // Criar corações a cada 300ms
-  setInterval(createHeart, 300);
+    // ===== MÚSICA AUTOMÁTICA =====
+    document.addEventListener('click', () => {
+      document.getElementById('music').play();
+    }, { once: true });
   </script>
+
 </body>
 </html>
