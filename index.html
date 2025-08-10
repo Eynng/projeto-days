@@ -125,11 +125,13 @@
         padding: 14px 28px;
       }
     }
+
   </style>
 </head>
 <body>
 
   <h1>💖 Ewelyn e Ramon 💖</h1>
+
   <div class="contador" id="contador"></div>
 
   <!-- Player de música -->
@@ -142,14 +144,17 @@
 
 
   <!-- Slideshow -->
+
 <div class="slideshow">
-  <img id="foto" src="foto1.jpg" alt="Foto do casal" class="show">
+  <img id="foto" src="images/foto1.png" alt="Foto do casal" class="show">
+
   <div class="btn-container">
     <button onclick="anteriorFoto()">⬅ Anterior</button>
     <button onclick="proximaFoto()">Próximo ➡</button>
   </div>
 
   <!-- Texto romântico -->
+
   <div class="mensagem-romantica">
     Oi meu amor, mil perdões por demorar tanto para lhe entregar este presente, 
     é um presente significativo, simbólico... maas, você é tão minimalista, simples, 
@@ -178,17 +183,17 @@
       dias %= 30;
 
       document.getElementById("contador").textContent =
-        `${meses} meses, ${dias} dias, ${horas} horas, ${minutos} minutos e ${segundos} segundos`;
+      `Estamos juntos há ${meses} meses, ${dias} dias, ${horas} horas, ${minutos} minutos e ${segundos} segundos`;
     }
     setInterval(atualizarContador, 1000);
     atualizarContador();
 
     // ===== SLIDESHOW =====
+    
     const fotos = ["foto1.jpg", "foto2.jpg", "foto3.jpg"];
     let fotoAtual = 0;
     const img = document.getElementById("foto");
     let intervalo;
-
     function mostrarFoto() {
       img.classList.remove("show");
       setTimeout(() => {
@@ -224,6 +229,7 @@
     iniciarSlideshow();
 
     // ===== CORAÇÕES CAINDO =====
+
     function criarCoracao() {
       const heart = document.createElement("div");
       heart.classList.add("heart");
@@ -240,6 +246,7 @@
     setInterval(criarCoracao, 300);
 
     // ===== MÚSICA AUTOMÁTICA =====
+
     document.addEventListener('click', () => {
       document.getElementById('music').play();
     }, { once: true });
